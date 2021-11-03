@@ -11,12 +11,10 @@
 
 .container {
     width: 100%;
-    border: solid;
 }
 
 .frame {
     width: 100%;
-    border: solid;
     text-align: center;
 }
 
@@ -26,6 +24,25 @@
 
 .invisible {
     display: none;
+}
+
+.circles {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.circle {
+    height: 15px;
+    width: 15px;
+    border: 1px solid;
+    border-color: grey;
+    margin: 0.5rem;
+    border-radius: 100%;
+}
+
+.circle-active {
+    background-color: grey;
 }
 
 .buttons {
