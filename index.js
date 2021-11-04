@@ -6,8 +6,8 @@ const previousButtonElement = document.getElementById('previous');
 const circleElements = document.querySelectorAll('.circle');
 
 // Adding event listeners
-nextButtonElement.addEventListener('click', renderNextImage);
-previousButtonElement.addEventListener('click', renderPreviousImage);
+nextButtonElement.addEventListener('click', nextImage);
+previousButtonElement.addEventListener('click', previousImage);
 circleElements.forEach(circle => {
     circle.addEventListener('click', (e) => {
         displayImage(e.target.id);
@@ -29,44 +29,32 @@ frameElements.forEach(frame => {
     IdCounter++;
 });
 
-// Keep track of the images
 let currentImage = frames[0];
-let nextImage = frames[1];
-let previousImage = frames[frames.length - 1];
 
-function updateImageOrder() {
-    for (let i = 0; i < frames.length; i++) {
-        if (!frames[i].element.classList.contains('invisible')) {
-            currentImage = frames[i];
-
-            if (!frames[i].element.nextElementSibling) {
-                nextImage = frames[0];
-            } else {
-                nextImage = frames[i + 1];
-            }
-
-            if (!frames[i].element.previousElementSibling) {
-                previousImage = frames[frames.length - 1];
-            } else {
-                previousImage = frames[i - 1];
-            }
-        }
+function nextImage() {
+    if (currentImage.id + 1 < frames.length) {
+        currentImage.element.classList.add('invisible');
+        frames[currentImage.id + 1].element.classList.remove('invisible');
+        currentImage = frames[currentImage.id + 1];
+    } else {
+        currentImage.element.classList.add('invisible');
+        frames[0].element.classList.remove('invisible');
+        currentImage = frames[0];
     }
     updateActiveCircle();
 }
 
-updateImageOrder();
-
-function renderNextImage() {
-    currentImage.element.classList.add('invisible');
-    nextImage.element.classList.remove('invisible');
-    updateImageOrder();
-}
-
-function renderPreviousImage() {
-    currentImage.element.classList.add('invisible');
-    previousImage.element.classList.remove('invisible');
-    updateImageOrder();
+function previousImage() {
+    if (currentImage.id - 1 >= 0) {
+        currentImage.element.classList.add('invisible');
+        frames[currentImage.id - 1].element.classList.remove('invisible');
+        currentImage = frames[currentImage.id - 1];
+    } else {
+        currentImage.element.classList.add('invisible');
+        frames[frames.length - 1].element.classList.remove('invisible');
+        currentImage = frames[frames.length - 1];
+    }
+    updateActiveCircle();
 }
 
 function updateImage(element) {
@@ -76,7 +64,6 @@ function updateImage(element) {
         }
     });
     element.classList.remove('invisible');
-    updateImageOrder()
 }
 
 function displayImage(id) {
@@ -85,6 +72,8 @@ function displayImage(id) {
             updateImage(frame.element);
         }
     });
+    currentImage = frames[id];
+    updateActiveCircle();
 }
 
 function updateActiveCircle() {
